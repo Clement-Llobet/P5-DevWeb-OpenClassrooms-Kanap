@@ -3,10 +3,9 @@ fetch("http://localhost:3000/api/products")
     .then(response => response.json())
     .then((data) => {
 
-        let producList = data;
         let items = document.getElementById("items");
 
-        items.innerHTML = producList.map(product => `
+        items.innerHTML = data.map(product => `
             <a href="./product.html?id=${product._id}">
                 <article>
                     <img src="${product.imageUrl}" alt="${product.altTxt}">
@@ -14,7 +13,7 @@ fetch("http://localhost:3000/api/products")
                     <p class="productDescription">${product.description}</p>
                 </article>
             </a>`
-        ) 
+        );
     })
     .catch(error => "L'erreur suivante est survenue : " + error)
 
