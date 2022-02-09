@@ -1,9 +1,5 @@
-// Méthdde de requête à l'API pour récupérer l'ensemble des produits et insérer chaque élément dans la page d'accueil
-fetch("http://localhost:3000/api/products")
-    .then(response => response.json())
-    .then((data) => {
-
-        let items = document.getElementById("items");
+const insertInfos = (data) => {
+    let items = document.getElementById("items");
 
         items.innerHTML = data.map(product => `
             <a href="./product.html?id=${product._id}">
@@ -13,8 +9,13 @@ fetch("http://localhost:3000/api/products")
                     <p class="productDescription">${product.description}</p>
                 </article>
             </a>`
-        );
+        ).join("");
+}
+
+// Méthdde de requête à l'API pour récupérer l'ensemble des produits et insérer chaque élément dans la page d'accueil
+fetch("http://localhost:3000/api/products")
+    .then(response => response.json())
+    .then((data) => {
+        insertInfos(data);
     })
     .catch(error => "L'erreur suivante est survenue : " + error)
-
-
