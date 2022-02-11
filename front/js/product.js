@@ -69,39 +69,51 @@ let parsedArray = new Array;
 
 localStorage.getItem("cart") === null ? array : array.push(localStorage.getItem("cart"));
 array.length === 0 ? array : parsedArray = JSON.parse(array);
-console.log(array);
-console.log(parsedArray);
+
 
 addToCart.addEventListener("click", () => {
 
-    // Ajouter une fonction qui vérifie si le client a bien sélectionné une couleur et si la quantité est > 0
-    
-    if (localStorage.getItem("cart") === null) {
-        let newObject = new Product(thisID, input.value, productSelectOptions.options[productSelectOptions.selectedIndex].value);
-        parsedArray.push(newObject);
-        localStorage.setItem("cart", JSON.stringify(parsedArray));
-    }
-    else {
-        let index = parsedArray.findIndex((object) => object.id === thisID);
-        console.log(index);
+    // Fonction gérant l'ajout ou la modification des données dans le localStorage
+    const manageLocalStorageDatas = () => {
 
-        if (index === -1) {
-            let newObject = new Product(thisID, input.value, productSelectOptions.options[productSelectOptions.selectedIndex].value);
-            parsedArray.push(newObject);
-            console.log(parsedArray);
-
-            localStorage.setItem("cart", JSON.stringify(parsedArray));
-        }
-        else if (parsedArray[index].id === thisID && parsedArray[index].color === productSelectOptions.options[productSelectOptions.selectedIndex].value) {
-            parsedArray[index].quantity = (parseInt(parsedArray[index].quantity) + parseInt(input.value)).toString();
-            localStorage.setItem("cart", JSON.stringify(parsedArray));
-        }
+        if (input.value === "0" || productSelectOptions.options[productSelectOptions.selectedIndex].value === "") {
+            alert("Vous devez choisir une quantité et une couleur pour votre Kanap !")
+        } 
         else {
             let newObject = new Product(thisID, input.value, productSelectOptions.options[productSelectOptions.selectedIndex].value);
-            parsedArray.push(newObject);
-            console.log(parsedArray);
+            let index = parsedArray.findIndex((object) => object.id === thisID);
+        
+            // Fonction pour ajouter ou modifier un produit dans le LocalStorage
+            const addAndModifyDatasToLocalStorage = (thisArray) => {
+                if (index === -1) {
+                    thisArray.push(newObject);
+                    localStorage.setItem("cart", JSON.stringify(thisArray));
+                }
+                else if (thisArray[index].id === thisID && thisArray[index].color === productSelectOptions.options[productSelectOptions.selectedIndex].value) {
+                    thisArray[index].quantity = (parseInt(thisArray[index].quantity) + parseInt(input.value)).toString();
+                    localStorage.setItem("cart", JSON.stringify(thisArray));
+                }
+                else {
+                    thisArray.push(newObject);
+                    localStorage.setItem("cart", JSON.stringify(thisArray));
+                }
+            }
+        
+            const sendToLocalStorage = (thisArray) => {
+                if (localStorage.getItem("cart") === null) {
+                    thisArray.push(newObject);
+                    localStorage.setItem("cart", JSON.stringify(thisArray));
+                }
+                else {
+                    addAndModifyDatasToLocalStorage(thisArray);
+                }
+            }
+        
+            sendToLocalStorage(parsedArray);
 
-            localStorage.setItem("cart", JSON.stringify(parsedArray));
+            window.confirm(`L'article ${productTitle.textContent} a bien été ajouté à votre panier`)
         }
     }
+
+    manageLocalStorageDatas();
 })
