@@ -65,43 +65,43 @@ let addToCart = document.getElementById("addToCart");
 let input = document.getElementById('quantity');
 
 let array = new Array;
+let parsedArray = new Array;
+
+localStorage.getItem("cart") === null ? array : array.push(localStorage.getItem("cart"));
+array.length === 0 ? array : parsedArray = JSON.parse(array);
 console.log(array);
-
-localStorage.getItem("cart") === null ? [] : array.push(JSON.parse(localStorage.getItem("cart")))
-
-console.log(array);
-
+console.log(parsedArray);
 
 addToCart.addEventListener("click", () => {
-    console.log(array);
+
+    // Ajouter une fonction qui vérifie si le client a bien sélectionné une couleur et si la quantité est > 0
+    
     if (localStorage.getItem("cart") === null) {
         let newObject = new Product(thisID, input.value, productSelectOptions.options[productSelectOptions.selectedIndex].value);
-        array.push(newObject);
-        localStorage.setItem("cart", JSON.stringify(array));
+        parsedArray.push(newObject);
+        localStorage.setItem("cart", JSON.stringify(parsedArray));
     }
     else {
-        console.log(array);
-        // array.forEach(() => {
-        for (object in array) {
-            
-            console.log(object);
-            // if (object.id === thisID && object.color === productSelectOptions.options[productSelectOptions.selectedIndex].value) {
-            //     console.log("On change seulement la valeur de la quantité de l'objet");
-            //     // object.quantity = ParseInt(object.quantity) + ParseInt(input.value);
-            //     // console.log(object.quantity);
-            // }
-            // else {
-            //     console.log("On créé un nouvel objet qu'on ajoute au tableau");
-            // }
+        let index = parsedArray.findIndex((object) => object.id === thisID);
+        console.log(index);
+
+        if (index === -1) {
+            let newObject = new Product(thisID, input.value, productSelectOptions.options[productSelectOptions.selectedIndex].value);
+            parsedArray.push(newObject);
+            console.log(parsedArray);
+
+            localStorage.setItem("cart", JSON.stringify(parsedArray));
         }
-        // )
+        else if (parsedArray[index].id === thisID && parsedArray[index].color === productSelectOptions.options[productSelectOptions.selectedIndex].value) {
+            parsedArray[index].quantity = (parseInt(parsedArray[index].quantity) + parseInt(input.value)).toString();
+            localStorage.setItem("cart", JSON.stringify(parsedArray));
+        }
+        else {
+            let newObject = new Product(thisID, input.value, productSelectOptions.options[productSelectOptions.selectedIndex].value);
+            parsedArray.push(newObject);
+            console.log(parsedArray);
+
+            localStorage.setItem("cart", JSON.stringify(parsedArray));
+        }
     }
-
-    
-
-    // let newObject = new Product(thisID, input.value, productSelectOptions.options[productSelectOptions.selectedIndex].value);
-    // array.push(newObject);
-    // console.log(array);
-
-    // localStorage.setItem("cart", JSON.stringify(array));
 })
