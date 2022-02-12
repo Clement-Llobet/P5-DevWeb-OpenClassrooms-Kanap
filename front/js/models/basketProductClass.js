@@ -1,8 +1,8 @@
-import { Product } from "./productClass";
+import { Product } from "./productClass.js";
 
 class BasketProduct extends Product {
     constructor(id, name, price, imageUrl, description, altTxt, quantity, color) {
-        super(id, quantity, color)
+        super(id, quantity, color);
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
@@ -10,3 +10,5 @@ class BasketProduct extends Product {
         this.altTxt = altTxt;
     }
 }
+
+export { BasketProduct }

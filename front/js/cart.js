@@ -1,29 +1,52 @@
+import { BasketProduct } from "./models/basketProductClass.js";
+
+
 let array = new Array;
-let parsedArray = new Array;
+let basketArray;
 
 localStorage.getItem("cart") === null ? array : array.push(localStorage.getItem("cart"));
-array.length === 0 ? array : parsedArray = JSON.parse(array);
+array.length === 0 ? array : basketArray = JSON.parse(array);
 
-let dataProduct = new BasketProduct();
+console.log(basketArray);
 
+// Fonction pour insérer les élément du panier dans la page en fonction du localStorage
 const insertProducts = (data) => {
     let cartItems = document.getElementById("cart__items");
+    let basketProductArray = new Array;
 
-    cartItems.innerHTML = data.map(product => `
-            <article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
+    for (let i in basketArray) {
+        let index = data.findIndex((object) => object._id === basketArray[i].id);
+        let newBasketProduct = new BasketProduct();
+
+        if (data[index]._id === basketArray[i].id) {
+            newBasketProduct.id = data[index]._id;
+            newBasketProduct.name = data[index].name;
+            newBasketProduct.price = data[index].price;
+            newBasketProduct.imageUrl = data[index].imageUrl;
+            newBasketProduct.description = data[index].description;
+            newBasketProduct.altTxt = data[index].altTxt;
+            newBasketProduct.quantity = basketArray[i].quantity;
+            newBasketProduct.color = basketArray[i].color;
+
+            basketProductArray.push(newBasketProduct)
+        }
+    }
+
+    cartItems.innerHTML = basketProductArray.map(product => `
+            <article class="cart__item" data-id="${product.id}" data-color="${product.color}">
                 <div class="cart__item__img">
-                    <img src="../images/product01.jpg" alt="Photographie d'un canapé">
+                    <img src="${product.imageUrl}" alt="${product.altTxt}">
                 </div>
                 <div class="cart__item__content">
                     <div class="cart__item__content__description">
-                        <h2>Nom du produit</h2>
-                            <p>Vert</p>
-                            <p>42,00 €</p>
+                        <h2>${product.name}</h2>
+                            <p>${product.color}</p>
+                            <p>${product.price} €</p>
                     </div>
                     <div class="cart__item__content__settings">
                         <div class="cart__item__content__settings__quantity">
                             <p>Qté : </p>
-                                <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="42">
+                                <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${product.quantity}">
                         </div>
                         <div class="cart__item__content__settings__delete">
                             <p class="deleteItem">Supprimer</p>
