@@ -1,10 +1,4 @@
-class Product {
-    constructor(id, quantity, color) {
-        this.id = id;
-        this.quantity = quantity;
-        this.color = color;
-    }
-}
+import { Product } from "./models/productClass.js";
 
 // Fonction pour récupérer l'id du produit dans l'URL de la page
 const getUrlId = () => {
@@ -29,7 +23,6 @@ let productPrice = document.getElementById("price");
 let productDescription = document.getElementById("description");
 let productSelectOptions = document.getElementById("colors");
 
-
 // Fonction pour insérer les informations du produit
 const insertProductsDatas = (data) => {
     for (let i = 0; i < data.length; i++) {
@@ -39,11 +32,12 @@ const insertProductsDatas = (data) => {
             productPrice.innerHTML = `${data[i].price}`;
             productDescription.innerHTML = `${data[i].description}`;
             
-            productColors = data[i].colors;
+            let productColors = data[i].colors;
             productColors.forEach(color => {
                 let newOption = new Option(`${color}`, `${color}`);
                 productSelectOptions.appendChild(newOption);
             });
+
             
             document.title = `${data[i].name}`;
             break;
