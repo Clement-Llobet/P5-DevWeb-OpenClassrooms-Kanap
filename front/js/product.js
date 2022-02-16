@@ -64,50 +64,43 @@ let parsedArray = new Array;
 localStorage.getItem("cart") === null ? array : array.push(localStorage.getItem("cart"));
 array.length === 0 ? array : parsedArray = JSON.parse(array);
 
-
+// Fonction gérant l'ajout ou la modification des données dans le localStorage
 addToCart.addEventListener("click", () => {
-
-    // Fonction gérant l'ajout ou la modification des données dans le localStorage
-    const manageLocalStorageDatas = () => {
-
-        if (input.value === "0" || productSelectOptions.options[productSelectOptions.selectedIndex].value === "") {
-            alert("Vous devez choisir une quantité et une couleur pour votre Kanap !")
-        } 
-        else {
-            let newObject = new Product(thisID, input.value, productSelectOptions.options[productSelectOptions.selectedIndex].value);
-            let index = parsedArray.findIndex((object) => object.id === thisID);
-        
-            // Fonction pour ajouter ou modifier un produit dans le LocalStorage
-            const addAndModifyDatasToLocalStorage = (thisArray) => {
-                if (index === -1) {
-                    thisArray.push(newObject);
-                    localStorage.setItem("cart", JSON.stringify(thisArray));
-                }
-                else if (thisArray[index].id === thisID && thisArray[index].color === productSelectOptions.options[productSelectOptions.selectedIndex].value) {
-                    thisArray[index].quantity = (parseInt(thisArray[index].quantity) + parseInt(input.value)).toString();
-                    localStorage.setItem("cart", JSON.stringify(thisArray));
-                }
-                else {
-                    thisArray.push(newObject);
-                    localStorage.setItem("cart", JSON.stringify(thisArray));
-                }
+    if (input.value === "0" || productSelectOptions.options[productSelectOptions.selectedIndex].value === "") {
+        alert("Vous devez choisir une quantité et une couleur pour votre Kanap !")
+    } 
+    else {
+        let newObject = new Product(thisID, input.value, productSelectOptions.options[productSelectOptions.selectedIndex].value);
+        let index = parsedArray.findIndex((object) => object.id === thisID);
+    
+        // Fonction pour ajouter ou modifier un produit dans le LocalStorage
+        const addAndModifyDatasToLocalStorage = (thisArray) => {
+            if (index === -1) {
+                thisArray.push(newObject);
+                localStorage.setItem("cart", JSON.stringify(thisArray));
             }
-        
-            const sendToLocalStorage = (thisArray) => {
-                if (localStorage.getItem("cart") === null) {
-                    thisArray.push(newObject);
-                    localStorage.setItem("cart", JSON.stringify(thisArray));
-                }
-                else {
-                    addAndModifyDatasToLocalStorage(thisArray);
-                }
+            else if (thisArray[index].id === thisID && thisArray[index].color === productSelectOptions.options[productSelectOptions.selectedIndex].value) {
+                thisArray[index].quantity = (parseInt(thisArray[index].quantity) + parseInt(input.value)).toString();
+                localStorage.setItem("cart", JSON.stringify(thisArray));
             }
-        
-            sendToLocalStorage(parsedArray);
-
-            window.confirm(`L'article ${productTitle.textContent} a bien été ajouté à votre panier`)
+            else {
+                thisArray.push(newObject);
+                localStorage.setItem("cart", JSON.stringify(thisArray));
+            }
         }
-    }
+    
+        const sendToLocalStorage = (thisArray) => {
+            if (localStorage.getItem("cart") === null) {
+                thisArray.push(newObject);
+                localStorage.setItem("cart", JSON.stringify(thisArray));
+            }
+            else {
+                addAndModifyDatasToLocalStorage(thisArray);
+            }
+        }
+    
+        sendToLocalStorage(parsedArray);
 
-    manageLocalStorageDatas();
+        window.confirm(`L'article ${productTitle.textContent} a bien été ajouté à votre panier`)
+    }
 })
