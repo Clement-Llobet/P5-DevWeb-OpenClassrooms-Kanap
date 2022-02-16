@@ -54,7 +54,39 @@ const insertProducts = (data) => {
                     </div>
                 </div>
             </article>`
-        ).join("");    
+        ).join("");
+
+    // Méthode pour modifier la quantité du panier
+    const input = document.querySelectorAll("input.itemQuantity")
+
+    input.forEach((element) => {
+        element.addEventListener('change', () => {
+            let article = element.closest('article.cart__item');
+            
+            basketArray.forEach((object) => {
+                if (object.id === article.dataset.id) {
+                    object.quantity = element.value;
+                    localStorage.setItem("cart", JSON.stringify(basketArray));
+                }
+            })
+        })
+    })
+
+    // Méthode pour supprimer l'article du panier
+    const deleteButton = document.querySelectorAll("p.deleteItem");
+
+    deleteButton.forEach((button) => {
+        let article = button.closest('article.cart__item');
+
+        button.addEventListener('click', () => {
+            let index = basketArray.findIndex((object) => object.id === article.dataset.id);
+            basketArray.splice(index, 1);
+            article.style.display = "none";
+            localStorage.setItem("cart", JSON.stringify(basketArray));
+        })
+    })
+    
+    
 }
 
 fetch("http://localhost:3000/api/products")
