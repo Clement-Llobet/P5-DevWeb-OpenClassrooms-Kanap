@@ -16,15 +16,12 @@ const insertProducts = (data) => {
 
     for (let i in basketArray) {
         let index = data.findIndex((object) => object._id === basketArray[i].id);
-        let newBasketProduct = new BasketProduct();
+        // let newBasketProduct = new BasketProduct();
 
-        if (data[index]._id === basketArray[i].id) {
+        if (index > -1) {
+
+            let newBasketProduct = {...data[index]};
             newBasketProduct.id = data[index]._id;
-            newBasketProduct.name = data[index].name;
-            newBasketProduct.price = data[index].price;
-            newBasketProduct.imageUrl = data[index].imageUrl;
-            newBasketProduct.description = data[index].description;
-            newBasketProduct.altTxt = data[index].altTxt;
             newBasketProduct.quantity = basketArray[i].quantity;
             newBasketProduct.color = basketArray[i].color;
 
@@ -81,12 +78,10 @@ const insertProducts = (data) => {
         button.addEventListener('click', () => {
             let index = basketArray.findIndex((object) => object.id === article.dataset.id);
             basketArray.splice(index, 1);
-            article.style.display = "none";
+            article.remove() // remove Node ?
             localStorage.setItem("cart", JSON.stringify(basketArray));
         })
-    })
-    
-    
+    }) 
 }
 
 fetch("http://localhost:3000/api/products")
