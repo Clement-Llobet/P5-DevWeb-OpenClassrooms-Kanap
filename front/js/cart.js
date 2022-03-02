@@ -1,35 +1,72 @@
-let localStorageDatas = localStorage.getItem("cart", ) === null ? [] : [...JSON.parse(localStorage.getItem("cart"))];
+let localStorageDatas = localStorage.getItem("cart") === null ? [] : [...JSON.parse(localStorage.getItem("cart"))];
 
+// Fonction pour calculer le nombre d'articles et le prix total du panier
+const basketSums = () => {
+    let basketArticlesSum = 0;
+    let basketPricesSum = 0;
+    let itemQuantity = document.querySelectorAll('input.itemQuantity');
+
+    console.log(localStorageDatas);
+
+    itemQuantity.forEach((item) => {
+        basketArticlesSum += parseInt(item.value);
+        let article = item.closest('article.cart__item');
+
+        localStorageDatas.forEach((object) => {
+            if (object.id === article.dataset.id) {
+                console.log(object.price);
+                console.log(item.value);
+                basketPricesSum += (object.price * parseInt(item.value));
+                document.querySelector("#totalPrice").innerHTML = basketPricesSum;
+                document.querySelector("#totalQuantity").innerHTML = basketArticlesSum;
+            }
+        });
+    });
+}
+
+
+// Fonction pour supprimer les propriétés de l'objet qui ne doivent pas être envoyées dans le localStorage
+const deleteUselessObjectProperties = (objectToModify) => {
+    Object.keys(objectToModify)
+    .filter((key)=> {
+        if (key !== "id" && key !== "quantity" && key !== "color") {
+            return key
+        }
+    })
+    .forEach(property => Reflect.deleteProperty(objectToModify, property));
+}
 
 // Méthode pour modifier la quantité du panier
-const modifyBasketQuantity = () => {
+const modifyBasketQuantity = (localStorageDatas) => {
     document.querySelectorAll("input.itemQuantity").forEach((element) => {
         element.addEventListener('change', () => {
+
             let article = element.closest('article.cart__item');
-            
-            basketArray.forEach((object) => {
-                if (object.id === article.dataset.id) {
+            localStorageDatas.forEach((object) => {
+                if (object.id === article.dataset.id && object.color === article.dataset.color) {
                     object.quantity = element.value;
-                    localStorage.setItem("cart", JSON.stringify(basketArray));
                 }
+                deleteUselessObjectProperties(object);
+                localStorage.setItem("cart", JSON.stringify(localStorageDatas));
+                // Refaire appel localStorage avant setItem, placer dans autre var
             })
+            basketSums();
+
         })
     })
 }
 
 // Méthode pour supprimer l'article du panier
-const deleteArticle = () => {
-    document.querySelectorAll("p.deleteItem").forEach((button) => {
-        let article = button.closest('article.cart__item');
+// document.querySelectorAll("p.deleteItem").forEach((button) => {
+//     let article = button.closest('article.cart__item');
 
-        button.addEventListener('click', () => {
-            let index = basketArray.findIndex((object) => object.id === article.dataset.id);
-            basketArray.splice(index, 1);
-            article.remove() // remove Node ?
-            localStorage.setItem("cart", JSON.stringify(basketArray));
-        })
-    }) 
-}
+//     button.addEventListener('click', () => {
+//         let index = basketArray.findIndex((object) => object.id === article.dataset.id);
+//         basketArray.splice(index, 1);
+//         article.remove() // remove Node ?
+//         localStorage.setItem("cart", JSON.stringify(basketArray));
+//     })
+// })
 
 
 // Fonction pour insérer les élément du panier dans la page en fonction du localStorage
@@ -50,8 +87,8 @@ const insertProducts = (data) => {
             <div class="cart__item__content">
                 <div class="cart__item__content__description">
                     <h2>${product.name}</h2>
-                        <p>${product.color}</p>
-                        <p>${product.price} €</p>
+                    <p>${product.color}</p>
+                    <p>${product.price} €</p>
                 </div>
                 <div class="cart__item__content__settings">
                     <div class="cart__item__content__settings__quantity">
@@ -65,34 +102,15 @@ const insertProducts = (data) => {
             </div>
         </article>
     `).join("");
+
+    basketSums();
 }
 
-// Fonction pour calculer le nombre d'articles dans le panier
-const basketArticlesSum = () => {
-    let basketArticlesSum = 0;
-    let itemQuantity = document.querySelectorAll('input.itemQuantity');
-    itemQuantity.forEach((item) => {
-        basketArticlesSum += parseInt(item.value);
-    })
-    document.querySelector("#totalQuantity").innerHTML = (basketArticlesSum).toString();
-}
-
-// Fonction pour calculer le prix total du panier
-const basketPriceSum = () => {
-    let basketPriceSum = 0;
-    let itemPrice = document.querySelectorAll('div.cart__item__content__description');
-    itemPrice.forEach((item) => {
-        basketPriceSum += parseInt(item.lastElementChild.innerText);
-        console.log(basketPriceSum);
-    })
-    document.querySelector("#totalPrice").innerHTML = (basketPriceSum).toString();
-}
 
 fetch("http://localhost:3000/api/products")
     .then(response => response.json())
     .then((data) => {
         insertProducts(data);
-        basketArticlesSum();
-        basketPriceSum();
+        modifyBasketQuantity(localStorageDatas);
     })
     .catch(error => "L'erreur suivante est survenue : " + error)
