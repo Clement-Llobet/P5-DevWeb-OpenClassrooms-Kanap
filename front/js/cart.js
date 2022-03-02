@@ -70,7 +70,7 @@ const modifyBasketQuantity = (localStorageDatas) => {
 
 
 // Fonction pour insérer les élément du panier dans la page en fonction du localStorage
-const insertProducts = (data) => {
+const retrieveAndFormatProducts = (data) => {
     localStorageDatas.forEach((object) => {
         let info = data.find((element) => element._id === object.id);
         object.name = info.name;
@@ -78,7 +78,9 @@ const insertProducts = (data) => {
         object.altTxt = info.altTxt;
         object.price = info.price;
     })
+}
 
+const displayInfos = () => {
     document.getElementById("cart__items").innerHTML = localStorageDatas.map(product => `
         <article class="cart__item" data-id="${product.id}" data-color="${product.color}">
             <div class="cart__item__img">
@@ -102,15 +104,14 @@ const insertProducts = (data) => {
             </div>
         </article>
     `).join("");
-
-    basketSums();
 }
 
 
 fetch("http://localhost:3000/api/products")
     .then(response => response.json())
     .then((data) => {
-        insertProducts(data);
+        retrieveAndFormatProducts(data);
+        displayInfos();
         modifyBasketQuantity(localStorageDatas);
     })
     .catch(error => "L'erreur suivante est survenue : " + error)
