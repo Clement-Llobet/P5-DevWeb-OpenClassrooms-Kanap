@@ -1,12 +1,22 @@
-let localStorageDatas = localStorage.getItem("cart") === null ? [] : [...JSON.parse(localStorage.getItem("cart"))];
+import { getFromLocalStorage } from "./utils/getFromLocalStorage.js";
+
+let localStorageDatas = getFromLocalStorage();
 
 // Fonction pour calculer le nombre d'articles et le prix total du panier
+
+const addToLocalStorage = (element) => {
+    const cart = getFromLocalStorage();
+    let article = element.closest('article.cart__item');
+    const index = cart.findIndex(object => object.id === article.dataset.id && object.color === article.dataset.color);
+    cart[index].quantity = element.value;
+    localStorage.setItem('cart', JSON.stringify(cart));
+    return index
+}
+
 const basketSums = () => {
     let basketArticlesSum = 0;
     let basketPricesSum = 0;
     let itemQuantity = document.querySelectorAll('input.itemQuantity');
-
-    console.log(localStorageDatas);
 
     itemQuantity.forEach((item) => {
         basketArticlesSum += parseInt(item.value);
@@ -14,8 +24,6 @@ const basketSums = () => {
 
         localStorageDatas.forEach((object) => {
             if (object.id === article.dataset.id) {
-                console.log(object.price);
-                console.log(item.value);
                 basketPricesSum += (object.price * parseInt(item.value));
                 document.querySelector("#totalPrice").innerHTML = basketPricesSum;
                 document.querySelector("#totalQuantity").innerHTML = basketArticlesSum;
@@ -25,33 +33,13 @@ const basketSums = () => {
 }
 
 
-// Fonction pour supprimer les propriétés de l'objet qui ne doivent pas être envoyées dans le localStorage
-const deleteUselessObjectProperties = (objectToModify) => {
-    Object.keys(objectToModify)
-    .filter((key)=> {
-        if (key !== "id" && key !== "quantity" && key !== "color") {
-            return key
-        }
-    })
-    .forEach(property => Reflect.deleteProperty(objectToModify, property));
-}
-
 // Méthode pour modifier la quantité du panier
 const modifyBasketQuantity = (localStorageDatas) => {
     document.querySelectorAll("input.itemQuantity").forEach((element) => {
         element.addEventListener('change', () => {
-
-            let article = element.closest('article.cart__item');
-            localStorageDatas.forEach((object) => {
-                if (object.id === article.dataset.id && object.color === article.dataset.color) {
-                    object.quantity = element.value;
-                }
-                deleteUselessObjectProperties(object);
-                localStorage.setItem("cart", JSON.stringify(localStorageDatas));
-                // Refaire appel localStorage avant setItem, placer dans autre var
-            })
+            const index = addToLocalStorage(element);
+            localStorageDatas[index].quantity = element.value;
             basketSums();
-
         })
     })
 }
@@ -112,6 +100,7 @@ fetch("http://localhost:3000/api/products")
     .then((data) => {
         retrieveAndFormatProducts(data);
         displayInfos();
+        basketSums();
         modifyBasketQuantity(localStorageDatas);
     })
     .catch(error => "L'erreur suivante est survenue : " + error)
