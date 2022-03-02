@@ -34,7 +34,6 @@ fetch(`http://localhost:3000/api/products/${getUrlId()}`)
 let addToCart = document.getElementById("addToCart");
 let localStorageDatas = localStorage.getItem("cart") === null ? [] : [...JSON.parse(localStorage.getItem("cart"))];
 
-console.log(localStorageDatas);
 
 // Ajouter le produit et modifier quantité dans le localStorage
 const addAndModifyDatasToLocalStorage = (thisArray, object) => {

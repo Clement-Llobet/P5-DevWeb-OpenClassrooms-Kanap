@@ -2,17 +2,8 @@ import { getFromLocalStorage } from "./utils/getFromLocalStorage.js";
 
 let localStorageDatas = getFromLocalStorage();
 
+
 // Fonction pour calculer le nombre d'articles et le prix total du panier
-
-const addToLocalStorage = (element) => {
-    const cart = getFromLocalStorage();
-    let article = element.closest('article.cart__item');
-    const index = cart.findIndex(object => object.id === article.dataset.id && object.color === article.dataset.color);
-    cart[index].quantity = element.value;
-    localStorage.setItem('cart', JSON.stringify(cart));
-    return index
-}
-
 const basketSums = () => {
     let basketArticlesSum = 0;
     let basketPricesSum = 0;
@@ -32,29 +23,60 @@ const basketSums = () => {
     });
 }
 
+// Fonction destinée à récupérer le bon index d'un produit
+const addToLocalStorage = (element) => {
+    const cart = getFromLocalStorage();
+    let article = element.closest('article.cart__item');
+    const index = cart.findIndex(object => object.id === article.dataset.id && object.color === article.dataset.color);
+    cart[index].quantity = element.value;
+    localStorage.setItem('cart', JSON.stringify(cart));
+    return index
+}
 
-// Méthode pour modifier la quantité du panier
+// Fonction qui indique 0 par défault pour les sommes du panier
+const CountToZero = () => {
+    const cart = getFromLocalStorage();
+    console.log(cart);
+    if (cart.length === 0) {
+        document.querySelector("#totalPrice").innerHTML = "0";
+        document.querySelector("#totalQuantity").innerHTML = "0";
+    }
+}
+
+// Fonction pour modifier la quantité du panier
 const modifyBasketQuantity = (localStorageDatas) => {
     document.querySelectorAll("input.itemQuantity").forEach((element) => {
         element.addEventListener('change', () => {
             const index = addToLocalStorage(element);
             localStorageDatas[index].quantity = element.value;
             basketSums();
+            CountToZero();
         })
     })
 }
 
-// Méthode pour supprimer l'article du panier
-// document.querySelectorAll("p.deleteItem").forEach((button) => {
-//     let article = button.closest('article.cart__item');
+// Fonction pour supprimer un article du localStorage
+const removeFromLocalStorage = (element) => {
+    const cart = getFromLocalStorage();
+    let article = element.closest('article.cart__item');
+    const index = cart.findIndex(object => object.id === article.dataset.id && object.color === article.dataset.color);
+    cart.splice(index, 1);
+    localStorage.setItem("cart", JSON.stringify(cart));
+}
 
-//     button.addEventListener('click', () => {
-//         let index = basketArray.findIndex((object) => object.id === article.dataset.id);
-//         basketArray.splice(index, 1);
-//         article.remove() // remove Node ?
-//         localStorage.setItem("cart", JSON.stringify(basketArray));
-//     })
-// })
+
+// Méthode pour supprimer l'article du panier
+const deleteArticle = () => {
+    document.querySelectorAll("p.deleteItem").forEach((button) => {
+        button.addEventListener('click', () => {
+            let article = button.closest('article');
+            article.remove();
+            basketSums();
+            removeFromLocalStorage(button);
+            CountToZero();
+        })
+    })
+}
 
 
 // Fonction pour insérer les élément du panier dans la page en fonction du localStorage
@@ -100,7 +122,9 @@ fetch("http://localhost:3000/api/products")
     .then((data) => {
         retrieveAndFormatProducts(data);
         displayInfos();
-        basketSums();
         modifyBasketQuantity(localStorageDatas);
+        deleteArticle();
+        basketSums();
+        CountToZero();
     })
     .catch(error => "L'erreur suivante est survenue : " + error)
