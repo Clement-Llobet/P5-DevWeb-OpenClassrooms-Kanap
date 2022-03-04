@@ -13,45 +13,24 @@ class Contact {
     }
 
     checkName(name) {
-        if (name.length <= 2) {
-            let promptNameResponse = alert("Votre nom doit avoir plus de 2 caractères. Veuillez réessayer.");
-            return this.checkName(promptNameResponse)
-        }
-        return name
+        name.length <= 2 ? undefined : name;
     }
 
     checkSurname(surname) {
-        if (surname.length <= 2) {
-            let promptSurnameResponse = alert("Votre prénom doit avoir plus de 2 caractères. Veuillez réessayer.");
-            return this.checkSurname(promptSurnameResponse)
-        }
-        return surname
+        surname.length <= 2 ? undefined : surname;
     }
 
     checkEmail(email) {
         const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-        if (!regex.exec(email)) {
-            let promptEmailResponse = alert("Votre email n'est pas correct. Veuillez entrer un email valide. Veuillez réessayer.");
-            return this.checkEmail(promptEmailResponse)
-        }
-        return email
+        !regex.exec(email) ? undefined : email;
     }
 
     checkAddress(address) {
-        if (address.length <= 2) {
-            let promptAddressResponse = alert("L'addresse renseignée n'est pas correcte. Veuillez réessayer.");
-            return this.checkAddress(promptAddressResponse)
-        }
-        return address
+        address.length <= 2 ? undefined : address;
     }
 
     checkCity(city) {
-        if (city.length <= 2) {
-            let promptCityResponse = alert("La ville renseignée n'est pas correcte. Veuillez réessayer.");
-            return this.checkCity(promptCityResponse)
-        }
-        return city
+        city.length <= 2 ? undefined : city;
     }
 }
 
