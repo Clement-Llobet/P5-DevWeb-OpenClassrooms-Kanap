@@ -1,15 +1,15 @@
 class Contact {
-    constructor(name, surname, adress, city, email) {
+    constructor(name, surname, address, city, email) {
         this.name = name;
         this.surname = surname;
-        this.adress = adress;
+        this.address = address;
         this.city = city;
         this.email = email;
     }
 
     displayInfo() {
         console.log("Nom : " + this.name + " || Prénom : " + this.surname + " || email : " + this.email);
-        return [this.name, this.surname, this.adress, this.city, this.email]
+        return [this.name, this.surname, this.address, this.city, this.email]
     }
 
     checkName(name) {
@@ -37,6 +37,22 @@ class Contact {
         }
         return email
     }
-} 
+
+    checkAddress(address) {
+        if (address.length <= 2) {
+            let promptAddressResponse = alert("L'addresse renseignée n'est pas correcte. Veuillez réessayer.");
+            return this.checkAddress(promptAddressResponse)
+        }
+        return address
+    }
+
+    checkCity(city) {
+        if (city.length <= 2) {
+            let promptCityResponse = alert("La ville renseignée n'est pas correcte. Veuillez réessayer.");
+            return this.checkCity(promptCityResponse)
+        }
+        return city
+    }
+}
 
 export default Contact;

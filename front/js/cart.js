@@ -118,7 +118,7 @@ const displayInfos = () => {
 }
 
 
-
+// Insertion des éléments dans la page
 fetch("http://localhost:3000/api/products")
     .then(response => response.json())
     .then((data) => {
@@ -135,38 +135,46 @@ fetch("http://localhost:3000/api/products")
 let customerContact = new Contact();
 
 
-const checkCustomerProperty = (property) => {
-
-}
-
-const checkCustomerName = () => {
+const checkAndAddCustomerSurname = () => {
     document.getElementById("firstName").addEventListener("change", (input) => {
         customerContact.surname = customerContact.checkSurname(input.explicitOriginalTarget.value);
         console.log(customerContact);
     })
+}
 
+const checkAndAddCustomerName = () => {
     document.getElementById("lastName").addEventListener("change", (input) => {
         customerContact.name = customerContact.checkName(input.explicitOriginalTarget.value);
         console.log(customerContact);
     })
-
-    document.getElementById("adress").addEventListener("change", (input) => {
-        // customerContact.adress = input.explicitOriginalTarget.value;
-        // console.log(customerContact);
-        console.log(input.explicitOriginalTarget.value);
-    })
-
-    document.getElementById("city").addEventListener("change", (input) => {
-        customerContact.city = input.explicitOriginalTarget.value;
+}
+    
+const checkAndAddCustomerAddress = () => {
+    document.getElementById("address").addEventListener("change", (input) => {
+        customerContact.address = customerContact.checkAddress(input.explicitOriginalTarget.value);
         console.log(customerContact);
     })
-
+}
+    
+const checkAndAddCustomerCity = () => {
+    document.getElementById("city").addEventListener("change", (input) => {
+        customerContact.city = customerContact.checkCity(input.explicitOriginalTarget.value);
+        console.log(customerContact);
+    })
+}
+    
+const checkAndAddCustomerEmail = () => {
     document.getElementById("email").addEventListener("change", (input) => {
         customerContact.email = customerContact.checkEmail(input.explicitOriginalTarget.value);
         console.log(customerContact);
     })
 }
+    
 
-checkCustomerInfos();
 
+checkAndAddCustomerSurname();
+checkAndAddCustomerName();
+checkAndAddCustomerAddress();
+checkAndAddCustomerCity();
+checkAndAddCustomerEmail();
 

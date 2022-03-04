@@ -1,3 +1,5 @@
+import { getFromLocalStorage } from "./utils/getFromLocalStorage.js";
+
 // Fonction pour récupérer l'id du produit dans l'URL de la page
 const getUrlId = () => {
     let url = new URL(window.location.href);
@@ -28,11 +30,13 @@ fetch(`http://localhost:3000/api/products/${getUrlId()}`)
     .then((data) => {
         insertProductsDatas(data);
     })
-    .catch(error => "L'erreur suivante est survenue : " + error);
+    .catch(error => "L'erreur suivante est survenue : " + error)
+
+
 
 
 let addToCart = document.getElementById("addToCart");
-let localStorageDatas = localStorage.getItem("cart") === null ? [] : [...JSON.parse(localStorage.getItem("cart"))];
+let localStorageDatas = getFromLocalStorage();
 
 
 // Ajouter le produit et modifier quantité dans le localStorage
