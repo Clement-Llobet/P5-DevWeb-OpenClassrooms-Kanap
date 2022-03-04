@@ -1,4 +1,6 @@
 import { getFromLocalStorage } from "./utils/getFromLocalStorage.js";
+import Contact from "./utils/contact.js";
+
 
 let localStorageDatas = getFromLocalStorage();
 
@@ -36,7 +38,6 @@ const addToLocalStorage = (element) => {
 // Fonction qui indique 0 par défault pour les sommes du panier
 const CountToZero = () => {
     const cart = getFromLocalStorage();
-    console.log(cart);
     if (cart.length === 0) {
         document.querySelector("#totalPrice").innerHTML = "0";
         document.querySelector("#totalQuantity").innerHTML = "0";
@@ -117,6 +118,7 @@ const displayInfos = () => {
 }
 
 
+
 fetch("http://localhost:3000/api/products")
     .then(response => response.json())
     .then((data) => {
@@ -128,3 +130,43 @@ fetch("http://localhost:3000/api/products")
         CountToZero();
     })
     .catch(error => "L'erreur suivante est survenue : " + error)
+
+// Formulaire
+let customerContact = new Contact();
+
+
+const checkCustomerProperty = (property) => {
+
+}
+
+const checkCustomerName = () => {
+    document.getElementById("firstName").addEventListener("change", (input) => {
+        customerContact.surname = customerContact.checkSurname(input.explicitOriginalTarget.value);
+        console.log(customerContact);
+    })
+
+    document.getElementById("lastName").addEventListener("change", (input) => {
+        customerContact.name = customerContact.checkName(input.explicitOriginalTarget.value);
+        console.log(customerContact);
+    })
+
+    document.getElementById("adress").addEventListener("change", (input) => {
+        // customerContact.adress = input.explicitOriginalTarget.value;
+        // console.log(customerContact);
+        console.log(input.explicitOriginalTarget.value);
+    })
+
+    document.getElementById("city").addEventListener("change", (input) => {
+        customerContact.city = input.explicitOriginalTarget.value;
+        console.log(customerContact);
+    })
+
+    document.getElementById("email").addEventListener("change", (input) => {
+        customerContact.email = customerContact.checkEmail(input.explicitOriginalTarget.value);
+        console.log(customerContact);
+    })
+}
+
+checkCustomerInfos();
+
+
