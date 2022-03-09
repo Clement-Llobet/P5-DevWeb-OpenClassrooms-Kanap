@@ -7,11 +7,6 @@ class Contact {
         this.email = email;
     }
 
-    displayInfo() {
-        console.log("Nom : " + this.name + " || Prénom : " + this.surname + " || email : " + this.email);
-        return [this.name, this.surname, this.address, this.city, this.email]
-    }
-
     checkName(name) {
         name.length <= 2 ? undefined : name;
     }

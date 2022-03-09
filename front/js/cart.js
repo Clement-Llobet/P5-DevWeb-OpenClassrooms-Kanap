@@ -139,14 +139,17 @@ let customerContact = new Contact();
 // Fonctions vérifiant les informations entrées dans les input
 const checkAndAddCustomerSurname = () => {
     document.getElementById("firstName").addEventListener("change", (input) => {
-        customerContact.surname = customerContact.checkSurname(input.explicitOriginalTarget.value);
-        let elementToModify = input.target.nextElementSibling;
-        customerContact.surname ? elementToModify.innerText = "" : elementToModify.innerText = "Votre prénom doit avoir plus de 2 caractères. Veuillez réessayer.";    })
+
+        // console.log(customerContact);
+        // let elementToModify = input.target.nextElementSibling;
+        // customerContact.surname ? elementToModify.innerHTML = "" : elementToModify.innerText = "Votre prénom doit avoir plus de 2 caractères. Veuillez réessayer.";
+    })
 }
 
 const checkAndAddCustomerName = () => {
     document.getElementById("lastName").addEventListener("change", (input) => {
         customerContact.name = customerContact.checkName(input.explicitOriginalTarget.value);
+        console.log(customerContact);
         let elementToModify = input.target.nextElementSibling;
         customerContact.name ? elementToModify.innerText = "" : elementToModify.innerText = "Votre nom doit avoir plus de 2 caractères. Veuillez réessayer.";
     })
@@ -178,10 +181,39 @@ const checkAndAddCustomerEmail = () => {
 }
 
 
-// Fonction déclenchant l'envoi de la commande
-document.getElementById('order').addEventListener("click", () => {
-    console.log("Hello");
-})
+// // Fonction déclenchant l'envoi de la commande
+// const sendUserCommand = () => {
+//     fetch("http://localhost:3000/api/", {
+//         method: "POST",
+//         headers: {
+//             'Accept': 'application/json',
+//             'Content-Type' : 'application/json'
+//         },
+//         body: JSON.stringify({
+//             value: mettreIciLaValeur
+//         })
+//         .then((response) => {
+//             if (response.ok) {
+//                 return response.json();
+//             }
+//         })
+//         .then((value) => {
+//             console.log(value);
+//             // On récupère le numéro de commande
+//             // On va sur la page confirmation.html
+//             // On va chercher l'id #orderId
+//             // On insère le numéro de commande
+//         })
+//     });
+// }
+
+// document.getElementById('order').addEventListener("click", () => {
+//     sendUserCommand()
+    
+    
+
+//     console.log("Hello");
+// })
 
 checkAndAddCustomerSurname();
 checkAndAddCustomerName();
