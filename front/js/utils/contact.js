@@ -8,6 +8,9 @@ class Contact {
     }
 
     checkName(inputValue) {
+        const regex = /\d/;
+        
+        console.log(inputValue.contains(regex));
         inputValue.length <= 2 ? this.name = undefined : this.name = inputValue;
     }
 

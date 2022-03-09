@@ -120,7 +120,8 @@ const displayInfos = () => {
 
 
 // Insertion des éléments dans la page
-fetch("http://localhost:3000/api/products")
+const init = () => {
+    fetch("http://localhost:3000/api/products")
     .then(response => response.json())
     .then((data) => {
         retrieveAndFormatProducts(data);
@@ -131,6 +132,8 @@ fetch("http://localhost:3000/api/products")
         CountToZero();
     })
     .catch(error => "L'erreur suivante est survenue : " + error)
+}
+
 
 
 
@@ -139,95 +142,80 @@ let customerContact = new Contact();
 
 // Fonctions vérifiant les informations entrées dans les input
 const checkAndAddCustomerSurname = () => {
-    document.getElementById("firstName").addEventListener("change", (input) => {
-        let elementToModify = input.target.nextElementSibling;
-        customerContact.checkSurname(input.target.value);
-
-        customerContact.surname ?
-            elementToModify.innerText = ""
-            :
-            elementToModify.innerText = "Votre prénom doit avoir plus de 2 caractères. Veuillez réessayer.";
+    document.getElementById("firstName").addEventListener("change", (event) => {
+        let elementToModify = event.target.nextElementSibling;
+        customerContact.checkSurname(event.target.value);
+        customerContact.surname ? elementToModify.innerText = "" : elementToModify.innerText = "Votre prénom doit avoir plus de 2 caractères. Veuillez réessayer.";
     })
 }
 
 const checkAndAddCustomerName = () => {
-    document.getElementById("lastName").addEventListener("change", (input) => {
-        let elementToModify = input.target.nextElementSibling;
-        customerContact.checkName(input.target.value);
-
-        customerContact.name ?
-            elementToModify.innerText = ""
-            :
-            elementToModify.innerText = "Votre nom doit avoir plus de 2 caractères. Veuillez réessayer.";
+    document.getElementById("lastName").addEventListener("change", (event) => {
+        let elementToModify = event.target.nextElementSibling;
+        customerContact.checkName(event.target.value);
+        customerContact.name ? elementToModify.innerText = "" : elementToModify.innerText = "Votre nom doit avoir plus de 2 caractères. Veuillez réessayer.";
     })
 }
     
 const checkAndAddCustomerAddress = () => {
-    document.getElementById("address").addEventListener("change", (input) => {
-        let elementToModify = input.target.nextElementSibling;
-        customerContact.checkAddress(input.target.value);
-
-        customerContact.address ?
-            elementToModify.innerText = ""
-            :
-            elementToModify.innerText = "Votre adresse n'est pas correcte. Veuillez entrer une adresse valide";
+    document.getElementById("address").addEventListener("change", (event) => {
+        let elementToModify = event.target.nextElementSibling;
+        customerContact.checkAddress(event.target.value);
+        customerContact.address ? elementToModify.innerText = "" : elementToModify.innerText = "Votre adresse n'est pas correcte. Veuillez entrer une adresse valide";
     })
 }
     
 const checkAndAddCustomerCity = () => {
-    document.getElementById("city").addEventListener("change", (input) => {
-        let elementToModify = input.target.nextElementSibling;
-        customerContact.checkCity(input.target.value);
-
-        customerContact.city ?
-            elementToModify.innerText = ""
-            :
-            elementToModify.innerText = "La ville renseignée n'est pas correcte. Veuillez réessayer";
+    document.getElementById("city").addEventListener("change", (event) => {
+        let elementToModify = event.target.nextElementSibling;
+        customerContact.checkCity(event.target.value);
+        customerContact.city ? elementToModify.innerText = "" : elementToModify.innerText = "La ville renseignée n'est pas correcte. Veuillez réessayer";
     })
 }
     
 const checkAndAddCustomerEmail = () => {
-    document.getElementById("email").addEventListener("change", (input) => {
-        let elementToModify = input.target.nextElementSibling;
-        customerContact.checkEmail(input.target.value);
+    document.getElementById("email").addEventListener("change", (event) => {
+        let elementToModify = event.target.nextElementSibling;
+        customerContact.checkEmail(event.target.value);
         customerContact.email ? elementToModify.innerText = "" : elementToModify.innerText = "Votre email n'est pas correct. Veuillez entrer un email valide";    
     })
 }
 
 
 // // Fonction déclenchant l'envoi de la commande
-// const sendUserCommand = () => {
-//     fetch("http://localhost:3000/api/", {
-//         method: "POST",
-//         headers: {
-//             'Accept': 'application/json',
-//             'Content-Type' : 'application/json'
-//         },
-//         body: JSON.stringify({
-//             value: mettreIciLaValeur
-//         })
-//         .then((response) => {
-//             if (response.ok) {
-//                 return response.json();
-//             }
-//         })
-//         .then((value) => {
-//             console.log(value);
-//             // On récupère le numéro de commande
-//             // On va sur la page confirmation.html
-//             // On va chercher l'id #orderId
-//             // On insère le numéro de commande
-//         })
-//     });
-// }
+const sendUserCommand = () => {
 
-// document.getElementById('order').addEventListener("click", () => {
-//     sendUserCommand()
-    
-    
+    fetch("http://localhost:3000/api/product/order", {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type' : 'application/json'
+        },
+        body: JSON.stringify({
+            value: ""
+        })
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            }
+        })
+        .then((value) => {
+            console.log(value);
+            // On récupère le numéro de commande
+            // On va sur la page confirmation.html
+            // On va chercher l'id #orderId
+            // On insère le numéro de commande
+        })
+    });
+}
+
+document.getElementById('order').addEventListener("click", () => {
+    sendUserCommand()
 
 //     console.log("Hello");
-// })
+})
+
+window.onload = init;
 
 checkAndAddCustomerSurname();
 checkAndAddCustomerName();

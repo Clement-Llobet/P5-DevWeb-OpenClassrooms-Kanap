@@ -1,5 +1,8 @@
 import { getFromLocalStorage } from "./utils/getFromLocalStorage.js";
 
+let localStorageDatas = getFromLocalStorage();
+
+
 // Fonction pour récupérer l'id du produit dans l'URL de la page
 const getUrlId = () => {
     let url = new URL(window.location.href);
@@ -24,19 +27,45 @@ const insertProductsDatas = (data) => {
     data.colors.forEach(color => document.querySelector('#colors').appendChild(new Option(`${color}`, `${color}`)));
 }
 
-// Fonction pour récupérer un produit de l'API selon son id
-fetch(`http://localhost:3000/api/products/${getUrlId()}`)
-    .then(response => response.json())
-    .then((data) => {
-        insertProductsDatas(data);
+const addListeners = () => {
+    let addToCart = document.getElementById("addToCart");
+
+    // Fonction gérant l'ajout ou la modification des données dans le localStorage
+    addToCart.addEventListener("click", () => {
+        let input = document.getElementById('quantity');
+
+        if (input.value === "0" || document.querySelector("#colors").value === "") {
+            alert("Vous devez choisir une quantité et une couleur pour votre Kanap !")
+        } 
+        else {
+            let newObject = {
+                id: getUrlId(),
+                quantity: input.value,
+                color: document.querySelector("#colors").value
+            }
+
+            sendToLocalStorage(localStorageDatas, newObject);
+            localStorage.setItem("cart", JSON.stringify(localStorageDatas));
+            window.confirm(`L'article a bien été ajouté à votre panier`);
+        }
     })
-    .catch(error => "L'erreur suivante est survenue : " + error)
+}
 
+const sendToLocalStorage = (thisArray, object) => {
+    localStorageDatas.length === 0 ? thisArray.push(object) : addAndModifyDatasToLocalStorage(thisArray, object);
+}
 
+// Fonction pour récupérer un produit de l'API selon son id
+const init = () => {
+    fetch(`http://localhost:3000/api/products/${getUrlId()}`)
+        .then(response => response.json())
+        .then((data) => {
+            insertProductsDatas(data);
+        })
+        .catch(error => "L'erreur suivante est survenue : " + error)
 
-
-let addToCart = document.getElementById("addToCart");
-let localStorageDatas = getFromLocalStorage();
+        addListeners();
+}
 
 
 // Ajouter le produit et modifier quantité dans le localStorage
@@ -50,26 +79,6 @@ const addAndModifyDatasToLocalStorage = (thisArray, object) => {
     }
 }
 
-const sendToLocalStorage = (thisArray, object) => {
-    localStorageDatas.length === 0 ? thisArray.push(object) : addAndModifyDatasToLocalStorage(thisArray, object);
-}
 
-// Fonction gérant l'ajout ou la modification des données dans le localStorage
-addToCart.addEventListener("click", () => {
-    let input = document.getElementById('quantity');
 
-    if (input.value === "0" || document.querySelector("#colors").value === "") {
-        alert("Vous devez choisir une quantité et une couleur pour votre Kanap !")
-    } 
-    else {
-        let newObject = {
-            id: getUrlId(),
-            quantity: input.value,
-            color: document.querySelector("#colors").value
-        }
-
-        sendToLocalStorage(localStorageDatas, newObject);
-        localStorage.setItem("cart", JSON.stringify(localStorageDatas));
-        window.confirm(`L'article a bien été ajouté à votre panier`);
-    }
-})
+window.onload = init;

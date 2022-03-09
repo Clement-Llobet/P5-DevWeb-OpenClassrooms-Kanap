@@ -13,11 +13,13 @@ const insertInfos = (data) => {
 }
 
 // Méthdde de requête à l'API pour récupérer l'ensemble des produits et insérer chaque élément dans la page d'accueil
-window.onload(
+const init = () => {
     fetch("http://localhost:3000/api/products")
     .then(response => response.json())
     .then((data) => {
         insertInfos(data);
     })
     .catch(error => "L'erreur suivante est survenue : " + error)
-)
+}    
+
+window.onload = init;
