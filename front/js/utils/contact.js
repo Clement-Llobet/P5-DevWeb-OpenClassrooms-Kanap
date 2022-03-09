@@ -8,14 +8,13 @@ class Contact {
     }
 
     checkName(inputValue) {
-        const regex = /\d/;
-        
-        console.log(inputValue.contains(regex));
-        inputValue.length <= 2 ? this.name = undefined : this.name = inputValue;
+        const regex = /^[a-z ,.'-]+$/i
+        inputValue.length <= 2 || !inputValue.match(regex) ? this.name = undefined : this.name = inputValue;
     }
 
     checkSurname(inputValue) {
-        inputValue.length <= 2 ? this.surname = undefined : this.surname = inputValue;
+        const regex = /^[a-z ,.'-]+$/i
+        inputValue.length <= 2 || !inputValue.match(regex) ? this.surname = undefined : this.surname = inputValue;
     }
 
     checkEmail(inputValue) {
@@ -28,7 +27,8 @@ class Contact {
     }
 
     checkCity(inputValue) {
-        inputValue.length <= 2 ? this.city = undefined : this.city = inputValue;
+        const regex = /^[a-z ,.'-]+$/i
+        inputValue.length <= 2 || !inputValue.match(regex) ? this.city = undefined : this.city = inputValue;
     }
 }
 

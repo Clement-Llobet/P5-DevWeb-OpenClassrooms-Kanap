@@ -135,8 +135,6 @@ const init = () => {
 }
 
 
-
-
 // Formulaire
 let customerContact = new Contact();
 
@@ -145,7 +143,7 @@ const checkAndAddCustomerSurname = () => {
     document.getElementById("firstName").addEventListener("change", (event) => {
         let elementToModify = event.target.nextElementSibling;
         customerContact.checkSurname(event.target.value);
-        customerContact.surname ? elementToModify.innerText = "" : elementToModify.innerText = "Votre prénom doit avoir plus de 2 caractères. Veuillez réessayer.";
+        customerContact.surname ? elementToModify.innerText = "" : elementToModify.innerText = "Votre prénom doit être composé de lettres et avoir plus de 2 caractères. Veuillez réessayer.";
     })
 }
 
@@ -153,7 +151,7 @@ const checkAndAddCustomerName = () => {
     document.getElementById("lastName").addEventListener("change", (event) => {
         let elementToModify = event.target.nextElementSibling;
         customerContact.checkName(event.target.value);
-        customerContact.name ? elementToModify.innerText = "" : elementToModify.innerText = "Votre nom doit avoir plus de 2 caractères. Veuillez réessayer.";
+        customerContact.name ? elementToModify.innerText = "" : elementToModify.innerText = "Votre nom doit être composé de lettres et avoir plus de 2 caractères. Veuillez réessayer.";
     })
 }
     
@@ -169,7 +167,7 @@ const checkAndAddCustomerCity = () => {
     document.getElementById("city").addEventListener("change", (event) => {
         let elementToModify = event.target.nextElementSibling;
         customerContact.checkCity(event.target.value);
-        customerContact.city ? elementToModify.innerText = "" : elementToModify.innerText = "La ville renseignée n'est pas correcte. Veuillez réessayer";
+        customerContact.city ? elementToModify.innerText = "" : elementToModify.innerText = "Le nom de votre ville doit être composée de lettres et avoir plus de 2 caractères. Veuillez réessayer";
     })
 }
     
