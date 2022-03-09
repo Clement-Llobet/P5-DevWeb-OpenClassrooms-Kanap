@@ -7,25 +7,25 @@ class Contact {
         this.email = email;
     }
 
-    checkName(name) {
-        name.length <= 2 ? undefined : name;
+    checkName(inputValue) {
+        inputValue.length <= 2 ? this.name = undefined : this.name = inputValue;
     }
 
-    checkSurname(surname) {
-        surname.length <= 2 ? undefined : surname;
+    checkSurname(inputValue) {
+        inputValue.length <= 2 ? this.surname = undefined : this.surname = inputValue;
     }
 
-    checkEmail(email) {
+    checkEmail(inputValue) {
         const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        !regex.exec(email) ? undefined : email;
+        !regex.exec(inputValue) ? this.email = undefined : this.email = inputValue;
     }
 
-    checkAddress(address) {
-        address.length <= 2 ? undefined : address;
+    checkAddress(inputValue) {
+        inputValue.length <= 2 ? this.address = undefined : this.address = inputValue;
     }
 
-    checkCity(city) {
-        city.length <= 2 ? undefined : city;
+    checkCity(inputValue) {
+        inputValue.length <= 2 ? this.city = undefined : this.city = inputValue;
     }
 }
 

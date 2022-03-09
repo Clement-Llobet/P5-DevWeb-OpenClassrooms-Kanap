@@ -11,6 +11,7 @@ const basketSums = () => {
     let basketPricesSum = 0;
     let itemQuantity = document.querySelectorAll('input.itemQuantity');
 
+
     itemQuantity.forEach((item) => {
         basketArticlesSum += parseInt(item.value);
         let article = item.closest('article.cart__item');
@@ -139,44 +140,57 @@ let customerContact = new Contact();
 // Fonctions vérifiant les informations entrées dans les input
 const checkAndAddCustomerSurname = () => {
     document.getElementById("firstName").addEventListener("change", (input) => {
+        let elementToModify = input.target.nextElementSibling;
+        customerContact.checkSurname(input.target.value);
 
-        // console.log(customerContact);
-        // let elementToModify = input.target.nextElementSibling;
-        // customerContact.surname ? elementToModify.innerHTML = "" : elementToModify.innerText = "Votre prénom doit avoir plus de 2 caractères. Veuillez réessayer.";
+        customerContact.surname ?
+            elementToModify.innerText = ""
+            :
+            elementToModify.innerText = "Votre prénom doit avoir plus de 2 caractères. Veuillez réessayer.";
     })
 }
 
 const checkAndAddCustomerName = () => {
     document.getElementById("lastName").addEventListener("change", (input) => {
-        customerContact.name = customerContact.checkName(input.explicitOriginalTarget.value);
-        console.log(customerContact);
         let elementToModify = input.target.nextElementSibling;
-        customerContact.name ? elementToModify.innerText = "" : elementToModify.innerText = "Votre nom doit avoir plus de 2 caractères. Veuillez réessayer.";
+        customerContact.checkName(input.target.value);
+
+        customerContact.name ?
+            elementToModify.innerText = ""
+            :
+            elementToModify.innerText = "Votre nom doit avoir plus de 2 caractères. Veuillez réessayer.";
     })
 }
     
 const checkAndAddCustomerAddress = () => {
     document.getElementById("address").addEventListener("change", (input) => {
-        customerContact.address = customerContact.checkAddress(input.explicitOriginalTarget.value);
         let elementToModify = input.target.nextElementSibling;
-        customerContact.address ? elementToModify.innerText = "" : elementToModify.innerText = "L'adresse renseignée n'est pas correcte. Veuillez réessayer.";
+        customerContact.checkAddress(input.target.value);
 
+        customerContact.address ?
+            elementToModify.innerText = ""
+            :
+            elementToModify.innerText = "Votre adresse n'est pas correcte. Veuillez entrer une adresse valide";
     })
 }
     
 const checkAndAddCustomerCity = () => {
     document.getElementById("city").addEventListener("change", (input) => {
-        customerContact.city = customerContact.checkCity(input.explicitOriginalTarget.value);
         let elementToModify = input.target.nextElementSibling;
-        customerContact.city ? elementToModify.innerText = "" : elementToModify.innerText = "La ville renseignée n'est pas correcte. Veuillez réessayer";
+        customerContact.checkCity(input.target.value);
+
+        customerContact.city ?
+            elementToModify.innerText = ""
+            :
+            elementToModify.innerText = "La ville renseignée n'est pas correcte. Veuillez réessayer";
     })
 }
     
 const checkAndAddCustomerEmail = () => {
     document.getElementById("email").addEventListener("change", (input) => {
-        customerContact.email = customerContact.checkEmail(input.explicitOriginalTarget.value);
         let elementToModify = input.target.nextElementSibling;
-        customerContact.email ? elementToModify.innerText = "" : elementToModify.innerText = "Votre email n'est pas correct. Veuillez entrer un email valide";
+        customerContact.checkEmail(input.target.value);
+        customerContact.email ? elementToModify.innerText = "" : elementToModify.innerText = "Votre email n'est pas correct. Veuillez entrer un email valide";    
     })
 }
 
