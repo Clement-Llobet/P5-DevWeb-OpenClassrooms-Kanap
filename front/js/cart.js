@@ -203,7 +203,7 @@ const postCommand = () => {
             return response.json();
         }
     })
-    .then(console.log("La requête s'est bien passée"))
+    .then((value) => location.href = `./confirmation.html?id="${value.orderId}"`)
     // // On récupère le numéro de commande
     // // On va sur la page confirmation.html
     // // On va chercher l'id #orderId
