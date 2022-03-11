@@ -80,5 +80,4 @@ const addAndModifyDatasToLocalStorage = (thisArray, object) => {
 }
 
 
-
 window.onload = init;

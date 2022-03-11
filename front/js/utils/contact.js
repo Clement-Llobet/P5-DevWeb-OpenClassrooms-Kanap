@@ -1,20 +1,20 @@
 class Contact {
-    constructor(name, surname, address, city, email) {
-        this.name = name;
-        this.surname = surname;
+    constructor(firstName, lastName, address, city, email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.address = address;
         this.city = city;
         this.email = email;
     }
 
-    checkName(inputValue) {
+    checkLastname(inputValue) {
         const regex = /^[a-z ,.'-]+$/i
-        inputValue.length <= 2 || !inputValue.match(regex) ? this.name = undefined : this.name = inputValue;
+        inputValue.length <= 2 || !inputValue.match(regex) ? this.lastName = undefined : this.lastName = inputValue;
     }
 
-    checkSurname(inputValue) {
+    checkFirstname(inputValue) {
         const regex = /^[a-z ,.'-]+$/i
-        inputValue.length <= 2 || !inputValue.match(regex) ? this.surname = undefined : this.surname = inputValue;
+        inputValue.length <= 2 || !inputValue.match(regex) ? this.firstName = undefined : this.firstName = inputValue;
     }
 
     checkEmail(inputValue) {

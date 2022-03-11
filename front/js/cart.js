@@ -4,7 +4,6 @@ import Contact from "./utils/contact.js";
 
 let localStorageDatas = getFromLocalStorage();
 
-
 // Fonction pour calculer le nombre d'articles et le prix total du panier
 const basketSums = () => {
     let basketArticlesSum = 0;
@@ -142,16 +141,16 @@ let customerContact = new Contact();
 const checkAndAddCustomerSurname = () => {
     document.getElementById("firstName").addEventListener("change", (event) => {
         let elementToModify = event.target.nextElementSibling;
-        customerContact.checkSurname(event.target.value);
-        customerContact.surname ? elementToModify.innerText = "" : elementToModify.innerText = "Votre prénom doit être composé de lettres et avoir plus de 2 caractères. Veuillez réessayer.";
+        customerContact.checkFirstname(event.target.value);
+        customerContact.firstName ? elementToModify.innerText = "" : elementToModify.innerText = "Votre prénom doit être composé de lettres et avoir plus de 2 caractères. Veuillez réessayer.";
     })
 }
 
 const checkAndAddCustomerName = () => {
     document.getElementById("lastName").addEventListener("change", (event) => {
         let elementToModify = event.target.nextElementSibling;
-        customerContact.checkName(event.target.value);
-        customerContact.name ? elementToModify.innerText = "" : elementToModify.innerText = "Votre nom doit être composé de lettres et avoir plus de 2 caractères. Veuillez réessayer.";
+        customerContact.checkLastname(event.target.value);
+        customerContact.lastName ? elementToModify.innerText = "" : elementToModify.innerText = "Votre nom doit être composé de lettres et avoir plus de 2 caractères. Veuillez réessayer.";
     })
 }
     
@@ -176,41 +175,53 @@ const checkAndAddCustomerEmail = () => {
         let elementToModify = event.target.nextElementSibling;
         customerContact.checkEmail(event.target.value);
         customerContact.email ? elementToModify.innerText = "" : elementToModify.innerText = "Votre email n'est pas correct. Veuillez entrer un email valide";    
-    })
-}
-
-
-// // Fonction déclenchant l'envoi de la commande
-const sendUserCommand = () => {
-
-    fetch("http://localhost:3000/api/product/order", {
-        method: "POST",
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type' : 'application/json'
-        },
-        body: JSON.stringify({
-            value: ""
-        })
-        .then((response) => {
-            if (response.ok) {
-                return response.json();
-            }
-        })
-        .then((value) => {
-            console.log(value);
-            // On récupère le numéro de commande
-            // On va sur la page confirmation.html
-            // On va chercher l'id #orderId
-            // On insère le numéro de commande
-        })
     });
 }
 
-document.getElementById('order').addEventListener("click", () => {
-    sendUserCommand()
 
-//     console.log("Hello");
+// Fonction déclenchant l'envoi de la commande
+
+const postCommand = () => {
+
+    const cart = getFromLocalStorage();
+    let cartIds = cart.map((object) => {
+        return object.id
+    })
+
+    fetch("http://localhost:3000/api/products/order", {
+        method: "POST",
+        headers: {
+            "Content-Type" : "application/json"
+        },
+        body: JSON.stringify({
+            contact: customerContact,
+            products: cartIds
+        })
+    })
+    .then((response) => {
+        if (response.ok) {
+            return response.json();
+        }
+    })
+    .then(console.log("La requête s'est bien passée"))
+    // // On récupère le numéro de commande
+    // // On va sur la page confirmation.html
+    // // On va chercher l'id #orderId
+    // // On insère le numéro de commande
+}
+
+const sendUserCommand = () => {
+    try {
+        postCommand();
+    }
+    catch (error) {
+        throw (`An unexpected error occured: ${error}`);
+    }
+}
+
+document.getElementById('order').addEventListener("click", (event) => {
+    event.preventDefault();
+    sendUserCommand()
 })
 
 window.onload = init;
