@@ -215,12 +215,23 @@ const sendUserCommand = () => {
     }
 }
 
+const isCustomerContactCorrect = () => {
+    let response = true;
+    for (let property in customerContact) {
+        if (customerContact[property] === undefined) {
+            response = false;
+        }
+    }
+    response ? sendUserCommand() : alert("Attention : vous devez valider chaque champ.");
+}
+
 document.getElementById('order').addEventListener("click", (event) => {
     event.preventDefault();
-    sendUserCommand()
+    isCustomerContactCorrect();
 })
 
 window.onload = init;
+
 
 checkAndAddCustomerSurname();
 checkAndAddCustomerName();
