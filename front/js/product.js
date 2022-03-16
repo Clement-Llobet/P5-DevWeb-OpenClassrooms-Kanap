@@ -1,21 +1,6 @@
 import { getFromLocalStorage } from "./utils/getFromLocalStorage.js";
-
+import { getUrlParameter } from "./utils/getUrlParameters.js"
 let localStorageDatas = getFromLocalStorage();
-
-
-// Fonction pour récupérer l'id du produit dans l'URL de la page
-const getUrlId = () => {
-    let url = new URL(window.location.href);
-    let searchParams = new URLSearchParams(url.search);
-    
-    if (searchParams.has("id")) {
-        let id = searchParams.get("id");
-        return id
-    } else {
-        alert(`Erreur 404 : cette page n'existe pas.`);
-        window.location.href = "../index.html"
-    }
-}
 
 // Fonction pour insérer les informations du produit
 const insertProductsDatas = (data) => {
@@ -39,7 +24,7 @@ const addListeners = () => {
         } 
         else {
             let newObject = {
-                id: getUrlId(),
+                id: getUrlParameter("id"),
                 quantity: input.value,
                 color: document.querySelector("#colors").value
             }
@@ -57,7 +42,7 @@ const sendToLocalStorage = (thisArray, object) => {
 
 // Fonction pour récupérer un produit de l'API selon son id
 const init = () => {
-    fetch(`http://localhost:3000/api/products/${getUrlId()}`)
+    fetch(`http://localhost:3000/api/products/${getUrlParameter("id")}`)
         .then(response => response.json())
         .then((data) => {
             insertProductsDatas(data);

@@ -18,8 +18,8 @@ const basketSums = () => {
         localStorageDatas.forEach((object) => {
             if (object.id === article.dataset.id) {
                 basketPricesSum += (object.price * parseInt(item.value));
-                document.querySelector("#totalPrice").innerHTML = basketPricesSum;
-                document.querySelector("#totalQuantity").innerHTML = basketArticlesSum;
+                document.querySelector("#totalPrice").textContent = basketPricesSum;
+                document.querySelector("#totalQuantity").textContent = basketArticlesSum;
             }
         });
     });
@@ -39,8 +39,8 @@ const addToLocalStorage = (element) => {
 const CountToZero = () => {
     const cart = getFromLocalStorage();
     if (cart.length === 0) {
-        document.querySelector("#totalPrice").innerHTML = "0";
-        document.querySelector("#totalQuantity").innerHTML = "0";
+        document.querySelector("#totalPrice").textContent = "0";
+        document.querySelector("#totalQuantity").textContent = "0";
     }
 }
 
@@ -142,7 +142,7 @@ const checkAndAddCustomerSurname = () => {
     document.getElementById("firstName").addEventListener("change", (event) => {
         let elementToModify = event.target.nextElementSibling;
         customerContact.checkFirstname(event.target.value);
-        customerContact.firstName ? elementToModify.innerText = "" : elementToModify.innerText = "Votre prénom doit être composé de lettres et avoir plus de 2 caractères. Veuillez réessayer.";
+        customerContact.firstName ? elementToModify.textContent = "" : elementToModify.textContent = "Votre prénom doit être composé de lettres et avoir plus de 2 caractères. Veuillez réessayer.";
     })
 }
 
@@ -150,7 +150,7 @@ const checkAndAddCustomerName = () => {
     document.getElementById("lastName").addEventListener("change", (event) => {
         let elementToModify = event.target.nextElementSibling;
         customerContact.checkLastname(event.target.value);
-        customerContact.lastName ? elementToModify.innerText = "" : elementToModify.innerText = "Votre nom doit être composé de lettres et avoir plus de 2 caractères. Veuillez réessayer.";
+        customerContact.lastName ? elementToModify.textContent = "" : elementToModify.textContent = "Votre nom doit être composé de lettres et avoir plus de 2 caractères. Veuillez réessayer.";
     })
 }
     
@@ -158,7 +158,7 @@ const checkAndAddCustomerAddress = () => {
     document.getElementById("address").addEventListener("change", (event) => {
         let elementToModify = event.target.nextElementSibling;
         customerContact.checkAddress(event.target.value);
-        customerContact.address ? elementToModify.innerText = "" : elementToModify.innerText = "Votre adresse n'est pas correcte. Veuillez entrer une adresse valide";
+        customerContact.address ? elementToModify.textContent = "" : elementToModify.textContent = "Votre adresse n'est pas correcte. Veuillez entrer une adresse valide";
     })
 }
     
@@ -166,7 +166,7 @@ const checkAndAddCustomerCity = () => {
     document.getElementById("city").addEventListener("change", (event) => {
         let elementToModify = event.target.nextElementSibling;
         customerContact.checkCity(event.target.value);
-        customerContact.city ? elementToModify.innerText = "" : elementToModify.innerText = "Le nom de votre ville doit être composée de lettres et avoir plus de 2 caractères. Veuillez réessayer";
+        customerContact.city ? elementToModify.textContent = "" : elementToModify.textContent = "Le nom de votre ville doit être composée de lettres et avoir plus de 2 caractères. Veuillez réessayer";
     })
 }
     
@@ -174,7 +174,7 @@ const checkAndAddCustomerEmail = () => {
     document.getElementById("email").addEventListener("change", (event) => {
         let elementToModify = event.target.nextElementSibling;
         customerContact.checkEmail(event.target.value);
-        customerContact.email ? elementToModify.innerText = "" : elementToModify.innerText = "Votre email n'est pas correct. Veuillez entrer un email valide";    
+        customerContact.email ? elementToModify.textContent = "" : elementToModify.textContent = "Votre email n'est pas correct. Veuillez entrer un email valide";    
     });
 }
 
@@ -203,11 +203,7 @@ const postCommand = () => {
             return response.json();
         }
     })
-    .then((value) => location.href = `./confirmation.html?id="${value.orderId}"`)
-    // // On récupère le numéro de commande
-    // // On va sur la page confirmation.html
-    // // On va chercher l'id #orderId
-    // // On insère le numéro de commande
+    .then((value) => location.href = `./confirmation.html?id=${value.orderId}`)
 }
 
 const sendUserCommand = () => {
