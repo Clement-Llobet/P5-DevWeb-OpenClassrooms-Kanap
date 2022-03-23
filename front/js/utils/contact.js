@@ -8,12 +8,12 @@ class Contact {
     }
 
     checkLastname(inputValue) {
-        const regex = /^[a-z ,.'-]+$/i
+        const regex = /^[A-zÀ-ú\s\-]+$/i
         inputValue.length <= 2 || !inputValue.match(regex) ? this.lastName = undefined : this.lastName = inputValue;
     }
 
     checkFirstname(inputValue) {
-        const regex = /^[a-z ,.'-]+$/i
+        const regex = /^[A-zÀ-ú\s\-]+$/i
         inputValue.length <= 2 || !inputValue.match(regex) ? this.firstName = undefined : this.firstName = inputValue;
     }
 
@@ -27,7 +27,7 @@ class Contact {
     }
 
     checkCity(inputValue) {
-        const regex = /^[a-z ,.'-]+$/i
+        const regex = /^[A-zÀ-ú\s\-]+$/i
         inputValue.length <= 2 || !inputValue.match(regex) ? this.city = undefined : this.city = inputValue;
     }
 }
