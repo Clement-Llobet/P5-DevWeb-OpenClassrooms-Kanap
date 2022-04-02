@@ -1,8 +1,25 @@
 import { getFromLocalStorage } from "./utils/getFromLocalStorage.js";
 import Contact from "./utils/contact.js";
 
-
 let localStorageDatas = getFromLocalStorage();
+
+// Fonction qui indique 0 par défault pour les sommes du panier
+const CheckCountToZero = () => {
+    const cart = getFromLocalStorage();
+    if (cart.length === 0) {
+        document.querySelector("#totalPrice").textContent = "0";
+        document.querySelector("#totalQuantity").textContent = "0";
+    }
+}
+
+// Fonction pour supprimer un article du localStorage
+const removeFromLocalStorage = (element) => {
+    const cart = getFromLocalStorage();
+    let article = element.closest('article.cart__item');
+    const index = cart.findIndex(object => object.id === article.dataset.id && object.color === article.dataset.color);
+    cart.splice(index, 1);
+    localStorage.setItem("cart", JSON.stringify(cart));
+}
 
 // Fonction pour calculer le nombre d'articles et le prix total du panier
 const basketSums = () => {
@@ -25,6 +42,19 @@ const basketSums = () => {
     });
 }
 
+// Méthode pour supprimer l'article du panier
+const deleteArticle = () => {
+    document.querySelectorAll("p.deleteItem").forEach((button) => {
+        button.addEventListener('click', () => {
+            let article = button.closest('article');
+            article.remove();
+            basketSums();
+            removeFromLocalStorage(button);
+            CheckCountToZero();
+        })
+    })
+}
+
 // Fonction destinée à récupérer le bon index d'un produit
 const addToLocalStorage = (element) => {
     const cart = getFromLocalStorage();
@@ -35,15 +65,6 @@ const addToLocalStorage = (element) => {
     return index
 }
 
-// Fonction qui indique 0 par défault pour les sommes du panier
-const CountToZero = () => {
-    const cart = getFromLocalStorage();
-    if (cart.length === 0) {
-        document.querySelector("#totalPrice").textContent = "0";
-        document.querySelector("#totalQuantity").textContent = "0";
-    }
-}
-
 // Fonction pour modifier la quantité du panier
 const modifyBasketQuantity = (localStorageDatas) => {
     document.querySelectorAll("input.itemQuantity").forEach((element) => {
@@ -51,46 +72,12 @@ const modifyBasketQuantity = (localStorageDatas) => {
             const index = addToLocalStorage(element);
             localStorageDatas[index].quantity = element.value;
             basketSums();
-            CountToZero();
+            CheckCountToZero();
         })
     })
 }
 
-// Fonction pour supprimer un article du localStorage
-const removeFromLocalStorage = (element) => {
-    const cart = getFromLocalStorage();
-    let article = element.closest('article.cart__item');
-    const index = cart.findIndex(object => object.id === article.dataset.id && object.color === article.dataset.color);
-    cart.splice(index, 1);
-    localStorage.setItem("cart", JSON.stringify(cart));
-}
-
-
-// Méthode pour supprimer l'article du panier
-const deleteArticle = () => {
-    document.querySelectorAll("p.deleteItem").forEach((button) => {
-        button.addEventListener('click', () => {
-            let article = button.closest('article');
-            article.remove();
-            basketSums();
-            removeFromLocalStorage(button);
-            CountToZero();
-        })
-    })
-}
-
-
-// Fonction pour insérer les élément du panier dans la page en fonction du localStorage
-const retrieveAndFormatProducts = (data) => {
-    localStorageDatas.forEach((object) => {
-        let info = data.find((element) => element._id === object.id);
-        object.name = info.name;
-        object.imageUrl = info.imageUrl;
-        object.altTxt = info.altTxt;
-        object.price = info.price;
-    })
-}
-
+// Insère les informations dans le DOM
 const displayInfos = () => {
     document.getElementById("cart__items").innerHTML = localStorageDatas.map(product => `
         <article class="cart__item" data-id="${product.id}" data-color="${product.color}">
@@ -117,20 +104,15 @@ const displayInfos = () => {
     `).join("");
 }
 
-
-// Insertion des éléments dans la page
-const init = () => {
-    fetch("http://localhost:3000/api/products")
-    .then(response => response.json())
-    .then((data) => {
-        retrieveAndFormatProducts(data);
-        displayInfos();
-        modifyBasketQuantity(localStorageDatas);
-        deleteArticle();
-        basketSums();
-        CountToZero();
+// Fonction pour insérer les élément du panier dans la page en fonction du localStorage
+const retrieveAndFormatProducts = (data) => {
+    localStorageDatas.forEach((object) => {
+        let info = data.find((element) => element._id === object.id);
+        object.name = info.name;
+        object.imageUrl = info.imageUrl;
+        object.altTxt = info.altTxt;
+        object.price = info.price;
     })
-    .catch(error => "L'erreur suivante est survenue : " + error)
 }
 
 
@@ -225,17 +207,33 @@ const isCustomerContactCorrect = () => {
     response ? sendUserCommand() : alert("Attention : vous devez valider chaque champ.");
 }
 
-document.getElementById('order').addEventListener("click", (event) => {
-    event.preventDefault();
-    isCustomerContactCorrect();
-})
+const checkFormInfos = () => {
+    checkAndAddCustomerSurname();
+    checkAndAddCustomerName();
+    checkAndAddCustomerAddress();
+    checkAndAddCustomerCity();
+    checkAndAddCustomerEmail();
+
+    document.getElementById('order').addEventListener("click", (event) => {
+        event.preventDefault();
+        isCustomerContactCorrect();
+    })
+}
+
+// Insertion des éléments dans la page
+const init = () => {
+    fetch("http://localhost:3000/api/products")
+    .then(response => response.json())
+    .then((data) => {
+        retrieveAndFormatProducts(data);
+        displayInfos();
+        modifyBasketQuantity(localStorageDatas);
+        deleteArticle();
+        basketSums();
+        CheckCountToZero();
+        checkFormInfos();
+    })
+    .catch(error => "L'erreur suivante est survenue : " + error)
+}
 
 window.onload = init;
-
-
-checkAndAddCustomerSurname();
-checkAndAddCustomerName();
-checkAndAddCustomerAddress();
-checkAndAddCustomerCity();
-checkAndAddCustomerEmail();
-

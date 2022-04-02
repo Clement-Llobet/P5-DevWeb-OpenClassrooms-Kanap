@@ -1,3 +1,4 @@
+// Fonction pour insérer les données des produits dans la page
 const insertInfos = (data) => {
     let items = document.getElementById("items");
 
@@ -12,7 +13,7 @@ const insertInfos = (data) => {
         ).join("");
 }
 
-// Méthdde de requête à l'API pour récupérer l'ensemble des produits et insérer chaque élément dans la page d'accueil
+// Fonction de requête à l'API pour récupérer l'ensemble des produits et insérer chaque élément dans la page d'accueil
 const init = () => {
     fetch("http://localhost:3000/api/products")
     .then(response => response.json())

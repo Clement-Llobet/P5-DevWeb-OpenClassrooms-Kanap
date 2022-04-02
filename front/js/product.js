@@ -2,14 +2,20 @@ import { getFromLocalStorage } from "./utils/getFromLocalStorage.js";
 import { getUrlParameter } from "./utils/getUrlParameters.js"
 let localStorageDatas = getFromLocalStorage();
 
-// Fonction pour insérer les informations du produit
-const insertProductsDatas = (data) => {
-    document.title = `${data.name}`;
-    document.querySelector('#title').innerHTML = `${data.name}`;
-    document.querySelector('div.item__img').innerHTML = `<img src="${data.imageUrl}" alt="${data.altTxt}" />`;
-    document.querySelector('#price').innerHTML = `${data.price}`;
-    document.querySelector('#description').innerHTML = `${data.description}`;
-    data.colors.forEach(color => document.querySelector('#colors').appendChild(new Option(`${color}`, `${color}`)));
+// Ajouter le produit et modifier quantité dans le localStorage
+const addAndModifyDatasToLocalStorage = (thisArray, object) => {
+    let existingProductIndex = thisArray.findIndex((element) => element.id === object.id && element.color === object.color);
+
+    if (existingProductIndex > -1) {
+        thisArray[existingProductIndex].quantity = (parseInt(thisArray[existingProductIndex].quantity) + parseInt(object.quantity)).toString();
+    } else {
+        thisArray.push(object);
+    }
+}
+
+// Vérifie la taille des données du local Storage
+const sendToLocalStorage = (thisArray, object) => {
+    localStorageDatas.length === 0 ? thisArray.push(object) : addAndModifyDatasToLocalStorage(thisArray, object);
 }
 
 const addListeners = () => {
@@ -36,8 +42,14 @@ const addListeners = () => {
     })
 }
 
-const sendToLocalStorage = (thisArray, object) => {
-    localStorageDatas.length === 0 ? thisArray.push(object) : addAndModifyDatasToLocalStorage(thisArray, object);
+// Fonction pour insérer les informations du produit
+const insertProductsDatas = (data) => {
+    document.title = `${data.name}`;
+    document.querySelector('#title').innerHTML = `${data.name}`;
+    document.querySelector('div.item__img').innerHTML = `<img src="${data.imageUrl}" alt="${data.altTxt}" />`;
+    document.querySelector('#price').innerHTML = `${data.price}`;
+    document.querySelector('#description').innerHTML = `${data.description}`;
+    data.colors.forEach(color => document.querySelector('#colors').appendChild(new Option(`${color}`, `${color}`)));
 }
 
 // Fonction pour récupérer un produit de l'API selon son id
@@ -51,18 +63,5 @@ const init = () => {
 
         addListeners();
 }
-
-
-// Ajouter le produit et modifier quantité dans le localStorage
-const addAndModifyDatasToLocalStorage = (thisArray, object) => {
-    let existingProductIndex = thisArray.findIndex((element) => element.id === object.id && element.color === object.color);
-
-    if (existingProductIndex > -1) {
-        thisArray[existingProductIndex].quantity = (parseInt(thisArray[existingProductIndex].quantity) + parseInt(object.quantity)).toString();
-    } else {
-        thisArray.push(object);
-    }
-}
-
 
 window.onload = init;
