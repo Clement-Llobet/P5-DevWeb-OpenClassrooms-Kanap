@@ -14,7 +14,7 @@ const addAndModifyDatasToLocalStorage = (thisArray, object) => {
 }
 
 // Vérifie la taille des données du local Storage
-const sendToLocalStorage = (thisArray, object) => {
+const prepareToLocalStorage = (thisArray, object) => {
     localStorageDatas.length === 0 ? thisArray.push(object) : addAndModifyDatasToLocalStorage(thisArray, object);
 }
 
@@ -35,7 +35,7 @@ const addListeners = () => {
                 color: document.querySelector("#colors").value
             }
 
-            sendToLocalStorage(localStorageDatas, newObject);
+            prepareToLocalStorage(localStorageDatas, newObject);
             localStorage.setItem("cart", JSON.stringify(localStorageDatas));
             window.confirm(`L'article a bien été ajouté à votre panier`);
         }
