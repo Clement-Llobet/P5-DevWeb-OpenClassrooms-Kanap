@@ -170,7 +170,7 @@ const postCommand = () => {
         return object.id
     })
 
-    fetch("http://localhost:3000/api/products/order", {
+    fetch("https://p5-llobet-clement-oc.herokuapp.com/api/products/order", {
         method: "POST",
         headers: {
             "Content-Type" : "application/json"
@@ -222,7 +222,7 @@ const checkFormInfos = () => {
 
 // Insertion des éléments dans la page
 const init = () => {
-    fetch("http://localhost:3000/api/products")
+    fetch("https://p5-llobet-clement-oc.herokuapp.com/api/products")
     .then(response => response.json())
     .then((data) => {
         retrieveAndFormatProducts(data);
