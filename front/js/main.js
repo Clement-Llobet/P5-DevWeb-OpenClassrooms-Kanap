@@ -15,7 +15,7 @@ const insertInfos = (data) => {
 
 // Fonction de requête à l'API pour récupérer l'ensemble des produits et insérer chaque élément dans la page d'accueil
 const init = () => {
-    fetch("http://localhost:3000/api/products")
+    fetch("https://p5-llobet-clement-oc.herokuapp.com/api/products")
     .then(response => response.json())
     .then((data) => {
         insertInfos(data);
