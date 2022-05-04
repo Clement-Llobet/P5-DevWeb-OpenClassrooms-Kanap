@@ -1,1 +1,1 @@
-<meta http-equiv="refresh" content="0; url=https://github.com/ClemTeboll/P5_Llobet_Clement_OpenClassrooms-/tree/dev-js/front/html/index.html" />
+<meta http-equiv="refresh" content="0; url=https://clemteboll.github.io/P5_Llobet_Clement_OpenClassrooms-/front/html/index.html" />
