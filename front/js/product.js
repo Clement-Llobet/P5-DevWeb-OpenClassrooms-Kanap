@@ -54,7 +54,7 @@ const insertProductsDatas = (data) => {
 
 // Fonction pour récupérer un produit de l'API selon son id
 const init = () => {
-    fetch(`https://p5-llobet-clement-oc.herokuapp.com//api/products/${getUrlParameter("id")}`)
+    fetch(`https://p5-llobet-clement-oc.herokuapp.com/api/products/${getUrlParameter("id")}`)
         .then(response => response.json())
         .then((data) => {
             insertProductsDatas(data);
